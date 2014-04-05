@@ -44,7 +44,7 @@ local function get_index( self, ... )
     local e = select( i, ... )
     if e == nil then
       e = NIL
-    elseif type( e ) == "number" and e ~= e then
+    elseif e ~= e then -- can only happen for NaNs
       e = NAN
     end
     key = key[ e ]
@@ -64,12 +64,13 @@ end
 
 
 -- local helper function for both put variants below
-local function put( self, tab, val, n_keys, ... )
+-- returns true if tab can be removed from the parent table
+local function put( values, tab, val, n_keys, ... )
   if n_keys > 0 then
     local key = ...
     if key == nil then
       key = NIL
-    elseif type( key ) == "number" and key ~= key then
+    elseif key ~= key then -- can only happen for NaNs
       key = NAN
     end
     local nextt = tab[ key ]
@@ -77,13 +78,14 @@ local function put( self, tab, val, n_keys, ... )
       nextt = {}
       tab[ key ] = nextt
     end
-    if nextt and put( self, nextt, val, n_keys-1, select( 2, ... ) ) then
+    if nextt and put( values, nextt, val, n_keys-1, select( 2, ... ) ) then
+      -- nextt is empty and doesn't reference a value, so remove it ...
       tab[ key ] = nil
-      return next( tab ) == nil and self._values[ tab ] == nil
+      return values[ tab ] == nil and next( tab ) == nil
     end
     return false
   else
-    self._values[ tab ] = val
+    values[ tab ] = val
     return val == nil and next( tab ) == nil
   end
 end
@@ -96,14 +98,14 @@ function multikey:put( ... )
     val = select( n, ... )
     n = n - 1
   end
-  put( self, self._keys, val, n, ... )
+  put( self._values, self._keys, val, n, ... )
   return self
 end
 
 
 -- same as multikey:put, but value comes first not last
 function multikey:putv( val, ... )
-  put( self, self._keys, val, select( '#', ... ), ... )
+  put( self._values, self._keys, val, select( '#', ... ), ... )
   return self
 end
 
