@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="content-type" content="text/html; charset=utf-8" /><title>multikey -- A Lua Table Indexed by Multiple Keys</title><link rel="stylesheet" type="text/css" href="default.css" /><link rel="stylesheet" type="text/css" href="highlight.css" /><script type="text/javascript" src="highlight.pack.js"></script><script type="text/javascript">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title>multikey -- A Lua Table Indexed by Multiple Keys</title>
+	<link rel="stylesheet" type="text/css" href="default.css" />
+<link rel="stylesheet" type="text/css" href="highlight.css" /><script type="text/javascript" src="highlight.pack.js"></script><script type="text/javascript">
       hljs.initHighlightingOnLoad();
-    </script></head><body>
+    </script></head>
+<body>
 
 <p><img src="multikey.png" alt="multikey Logo" /></p>
 
@@ -58,7 +64,8 @@ multiple keys to single values. It is more expensive in terms of
 memory and performance than normal Lua tables that only store single
 key-value mappings, so use it with care.</p>
 
-<ul><li><p><code>multikey:new() ==&gt; object</code> or <code>multikey() ==&gt; object</code></p>
+<ul>
+    <li><p><code>multikey:new() ==&gt; object</code> or <code>multikey() ==&gt; object</code></p>
     
     <p>This is the constructor of a multikey object. The object is
     returned.</p></li>
@@ -95,7 +102,13 @@ key-value mappings, so use it with care.</p>
     <p>The <code>ituples</code>-method returns an iterator-triple that can be used
     in a for-loop to iterate over all integer keys starting from 1. It
     does not use a dummy value as the <code>tuples</code>-method above.</p></li>
-</ul><h3>How It Works</h3>
+</ul>
+
+<p>All methods listed above can also be used as normal module functions
+on ordinary tables (the table is always the first parameter).</p>
+
+
+<h3>How It Works</h3>
 
 <p>This module exploits the fact that a Lua table can be used as a unique
 key in another table and as a container for other key-value mappings.
@@ -103,17 +116,15 @@ Here is what a multikey object looks like after <code>mt:put( "a", "a" )</code>,
 <code>mt:put( "a","b", "a,b" )</code>, and <code>mt:put( "a","c", "a,c" )</code>:</p>
 
 <pre><code>mt = {
-  _keys = {
+  [ &lt;private key&gt; ] = {
     a = {     -- this table is t1
       b = {}, -- this table is t2
       c = {}  -- this table is t3
     }
   },
-  _values = {
-    [ t1 ] = "a",   -- table t1 from above is used as a key
-    [ t2 ] = "a,b", -- table t2 from above is used as a key
-    [ t3 ] = "a,c"  -- table t3 from above is used as a key
-  }
+  [ t1 ] = "a",   -- table t1 from above is used as a key
+  [ t2 ] = "a,b", -- table t2 from above is used as a key
+  [ t3 ] = "a,c"  -- table t3 from above is used as a key
 }
 </code></pre>
 
@@ -198,10 +209,10 @@ manually.</p>
 
 <h2><a name="License" id="License"></a>License</h2>
 
-<p>multikey is <em>copyrighted free software</em> distributed under the MIT
+<p><code>multikey</code> is <em>copyrighted free software</em> distributed under the MIT
 license (the same license as Lua 5.1). The full license text follows:</p>
 
-<pre><code class="no-highlight">multikey (c) 2011 Philipp Janda
+<pre><code class="no-highlight">multikey (c) 2011,2014 Philipp Janda
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
