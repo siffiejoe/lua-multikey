@@ -43,12 +43,16 @@ t1:put( 1,1,1,  nil )
 t1:put( 1,1,2,  nil )
 t1:put( 1,2,1,  nil )
 t1:put( 2,      nil )
-print( next( t1._keys ), next( t1._values ) )
+for k,v in next, t1 do
+  print( "t1:", k, v )
+end
 
 t1:put( 1,  1 )
 print( "1 ==", t1:get( 1 ) )
 t1:clear()
-print( next( t1._keys ), next( t1._values ) )
+for k,v in next, t1 do
+  print( "t1:", k, v )
+end
 
 t1:put( 1, 2, nil, nil,  2 )
 t1:put( 1, 2, nil, nil, 3,  nil )
@@ -57,5 +61,7 @@ print( "2 ==", t1:get( 1, 2, nil, nil ) )
 print( "nil ==", t1:get( 1, 2, nil, nil, 3 ) )
 print( "nil ==", t1:get( 1, 2, nil, nil, nil ) )
 t1:put( 1, 2, nil, nil,  nil )
-print( next( t1._keys ), next( t1._values ) )
+for k,v in next, t1 do
+  print( "t1:", k, v )
+end
 

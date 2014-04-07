@@ -2,12 +2,13 @@
 
 package.path = "../src/?.lua;" .. package.path
 local memoize = require( "multikey.memoize" )
+local unpack = unpack or table.unpack
 
 local function args_table( ... )
   return { n = select( '#', ... ), ... }
 end
 
-local function func( nr, a, b, c ,d )
+local function func( nr, a, b, c, d )
   print( "test call nr.", nr )
   return a, b, c+d
 end
