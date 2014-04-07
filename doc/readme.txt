@@ -94,6 +94,9 @@ key-value mappings, so use it with care.
     in a for-loop to iterate over all integer keys starting from 1. It
     does not use a dummy value as the `tuples`-method above.
 
+All methods listed above can also be used as normal module functions
+on ordinary tables (the table is always the first parameter).
+
 
 ###                          How It Works                          ###
 
@@ -103,17 +106,15 @@ Here is what a multikey object looks like after `mt:put( "a", "a" )`,
 `mt:put( "a","b", "a,b" )`, and `mt:put( "a","c", "a,c" )`:
 
     mt = {
-      _keys = {
+      [ <private key> ] = {
         a = {     -- this table is t1
           b = {}, -- this table is t2
           c = {}  -- this table is t3
         }
       },
-      _values = {
-        [ t1 ] = "a",   -- table t1 from above is used as a key
-        [ t2 ] = "a,b", -- table t2 from above is used as a key
-        [ t3 ] = "a,c"  -- table t3 from above is used as a key
-      }
+      [ t1 ] = "a",   -- table t1 from above is used as a key
+      [ t2 ] = "a,b", -- table t2 from above is used as a key
+      [ t3 ] = "a,c"  -- table t3 from above is used as a key
     }
 
 This is the same thing but as a pretty picture:
@@ -197,10 +198,10 @@ Comments and feedback are always welcome.
 
 ##                             License                              ##
 
-multikey is *copyrighted free software* distributed under the MIT
+`multikey` is *copyrighted free software* distributed under the MIT
 license (the same license as Lua 5.1). The full license text follows:
 
-    multikey (c) 2011 Philipp Janda
+    multikey (c) 2011,2014 Philipp Janda
 
     Permission is hereby granted, free of charge, to any person obtaining
     a copy of this software and associated documentation files (the
