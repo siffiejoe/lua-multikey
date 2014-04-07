@@ -64,8 +64,26 @@ end
 
 
 -- local helper function for both put variants below
+local function put( values, t, val, n_keys, ... )
+  for i = 1, n_keys do
+    local key = select( i, ... )
+    if key == nil then
+      key = NIL
+    elseif key ~= key then -- can only happen for NaNs
+      key = NAN
+    end
+    local nextt = t[ key ]
+    if not nextt then
+      nextt = {}
+      t[ key ] = nextt
+    end
+    t = nextt
+  end
+  values[ t ] = val
+end
+
 -- returns true if tab can be removed from the parent table
-local function put( values, tab, val, n_keys, ... )
+local function del( values, t, n_keys, ... )
   if n_keys > 0 then
     local key = ...
     if key == nil then
@@ -73,20 +91,16 @@ local function put( values, tab, val, n_keys, ... )
     elseif key ~= key then -- can only happen for NaNs
       key = NAN
     end
-    local nextt = tab[ key ]
-    if val ~= nil and nextt == nil then
-      nextt = {}
-      tab[ key ] = nextt
-    end
-    if nextt and put( values, nextt, val, n_keys-1, select( 2, ... ) ) then
+    local nextt = t[ key ]
+    if nextt and del( values, nextt, n_keys-1, select( 2, ... ) ) then
       -- nextt is empty and doesn't reference a value, so remove it ...
-      tab[ key ] = nil
-      return values[ tab ] == nil and next( tab ) == nil
+      t[ key ] = nil
+      return values[ t ] == nil and next( t ) == nil
     end
     return false
   else
-    values[ tab ] = val
-    return val == nil and next( tab ) == nil
+    values[ t ] = nil
+    return next( t ) == nil
   end
 end
 
@@ -98,14 +112,22 @@ function multikey:put( ... )
     val = select( n, ... )
     n = n - 1
   end
-  put( self._values, self._keys, val, n, ... )
+  if val == nil then
+    del( self._values, self._keys, n, ... )
+  else
+    put( self._values, self._keys, val, n, ... )
+  end
   return self
 end
 
 
 -- same as multikey:put, but value comes first not last
 function multikey:putv( val, ... )
-  put( self._values, self._keys, val, select( '#', ... ), ... )
+  if val == nil then
+    del( self._values, self._keys, select( '#', ... ), ... )
+  else
+    put( self._values, self._keys, val, select( '#', ... ), ... )
+  end
   return self
 end
 
