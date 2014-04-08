@@ -31,7 +31,7 @@ that work with any number of keys, including zero. You can also use
     put( t, 1,2,     "value1" )
     put( t, 1,nil,3, "value2" )
     put( t, 1,2,3,   "value3" )
-    put( t, "value4" )
+    put( t, "value4" )            -- zero keys is possible as well
     print( get( t, 1,2 ) )        -->  value1
     print( get( t, 1,nil,3 ) )    -->  value2
     print( get( t, 1,2,3 ) )      -->  value3
@@ -41,11 +41,11 @@ that work with any number of keys, including zero. You can also use
 
 `put` is convenient when you already know the keys you want to use. If
 you get the keys via a vararg list, the `putv` function is more
-useful, because it takes the value to assign as second parameter
+useful, because it takes the value to assign as second parameter,
 before the keys. Assigning `nil` will remove a previous value stored
 under the same keys from the table.
 
-    put( t, 1,2,3,  nil )
+    mk.putv( t, nil, 1,2,3 )
     print( get( t, 1,2,3 ) )      -->  nil
 
 For `pairs`- and `ipairs`-like iteration there are the `tuples` and
@@ -62,7 +62,7 @@ In case you like an object-oriented syntax, the `new` function will
 return a table with a metatable set, so that you can use the module
 functions as methods.
 
-    local t2 = mk.new()           --   mk() would have the same effect
+    local t2 = mk.new()           -- mk() would have the same effect
     t2:put( 1,2,  "value" )
     print( t2:get( 1,2 ) )        -->  value
     t2:clear()
@@ -137,7 +137,7 @@ iteration from as arguments to this function.
         ... : any*   -- prefix keys where to start iteration from
 
 The `ituples` function returns a for loop iterator that iterates over
-all integer keys starting from 1 (similar to `ipairs`). It does not
+all integer keys starting from `1` (similar to `ipairs`). It does not
 use a dummy value as the `tuples` function above.
 
 
@@ -148,7 +148,7 @@ key in another table and as a container for other key-value mappings.
 Here is what a multikey object looks like after `t:put( "a", "a" )`,
 `t:put( "a","b", "a,b" )`, and `t:put( "a","c", "a,c" )`:
 
-    mt = {
+    t = {
       [ <private key> ] = {
         a = {     -- this table is t1
           b = {}, -- this table is t2
