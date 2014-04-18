@@ -1,7 +1,7 @@
 package = "multikey"
-version = "0.2-1"
+version = "scm-0"
 source = {
-  url = "${SRCURL}",
+  url = "git://github.com/siffiejoe/lua-multikey.git"
 }
 description = {
   summary = "A simple multidimensional table.",
@@ -9,11 +9,11 @@ description = {
     This small Lua module allows to store values indexed by
     multiple keys.
   ]],
-  homepage = "${HPURL}",
+  homepage = "http://siffiejoe.github.io/lua-multikey/",
   license = "MIT"
 }
 dependencies = {
-  "lua >= 5.1, <= 5.2"
+  "lua >= 5.1, < 5.4"
 }
 build = {
   type = "builtin",
