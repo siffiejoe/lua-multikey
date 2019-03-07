@@ -7,6 +7,8 @@ local tuple = require( "multikey.tuple" )
 do
   local t1 = tuple( 1, 2, 3 )
   print( t1[ 1 ], t1[ 2 ], t1[ 3 ], t1.n )
+  collectgarbage()
+  collectgarbage()
   local t2 = tuple( 1, 2, 3 )
   print( t2[ 1 ], t2[ 2 ], t2[ 3 ], t2.n )
   local t = { [ t1 ] = true }

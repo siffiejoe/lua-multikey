@@ -17,12 +17,8 @@ putv( cache, 1, 1 )
 putv( cache, nil, 1 )
 -- hack to get a reference to the internal index data structure,
 -- to protect it, because we want to make the cache weak:
-local index
-do
-  local _
-  _, index = next( cache )
-end
-setmetatable( cache, { __mode="v" } )
+local _, INDEX = next( cache )
+setmetatable( cache, { __mode="v", INDEX = INDEX } )
 
 
 local function make_array( ... )
@@ -36,7 +32,7 @@ end
 
 
 local function remove_self( t )
-  putv( cache, nil, unpack( getmetatable( t ).__index ) )
+  putv( cache, nil, unpack( getmetatable( t ).__index, 1, t.n ) )
 end
 
 
