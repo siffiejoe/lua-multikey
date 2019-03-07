@@ -5,7 +5,9 @@ local next = assert( next )
 local select = assert( select )
 local error = assert( error )
 local setmetatable = assert( setmetatable )
+local getmetatable = assert( getmetatable )
 local unpack = assert( unpack or table.unpack )
+local newproxy = newproxy
 
 local multikey = require( "multikey" )
 local get, putv = multikey.get, multikey.putv
@@ -39,11 +41,12 @@ end
 local function tuple( ... )
   local v = get( cache, ... )
   if not v then
-    v = setmetatable( {}, {
-      __index = make_array( ... ),
-      __newindex = read_only,
-      __gc = remove_self
-    } )
+    v = newproxy and newproxy( true )
+                 or setmetatable( {}, { __gc = true } )
+    local m = getmetatable( v )
+    m.__index = make_array( ... )
+    m.__newindex = read_only
+    m.__gc = remove_self
     putv( cache, v, ... )
   end
   return v
