@@ -19,7 +19,7 @@ build = {
   type = "builtin",
   modules = {
     [ "multikey" ]         = "src/multikey.lua",
-    [ "multikey.memoize" ] = "src/multikey/memoize.lua"
+    [ "multikey.memoize" ] = "src/multikey/memoize.lua",
     [ "multikey.tuple" ] = "src/multikey/tuple.lua"
   }
 }
